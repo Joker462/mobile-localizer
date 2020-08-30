@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--
+ Localizable.strings
+ Netalo
+-->
+
+<!--  Common  -->
+
+	<string name="txt_cancel">Hủy</string>
+	<string name="txt_send">Gửi</string>
+	<string name="txt_create_group_failed">Tạo nhóm thất bại</string>
+	<string name="txt_message">Nhắn tin</string>
+	<string name="txt_reply">Trả lời</string>
+	<string name="txt_copy">Copy</string>
+	<string name="txt_share">Chia sẻ</string>
+	<string name="txt_delete">Xóa</string>
+	<string name="txt_search">Tìm kiếm</string>
+
+<!--  Account  -->
+
+	<string name="account_title">Tài khoản</string>
+	<string name="account_profile">Hồ sơ cá nhân</string>
+	<string name="account_setting">Cài đặt thông báo</string>
+	<string name="account_name_placeholder">Nhập tên đại diện</string>
+	<string name="account_phone_placeholder">Nhập số điện thoại</string>
+	<string name="account_language">Ngôn ngữ</string>
+	<string name="account_update">Cập nhật ngay</string>
+</resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--
+ Localizable.strings
+ Netalo
+-->
+
+<!--  Common  -->
+
+	<string name="txt_cancel">Cancel</string>
+	<string name="txt_send">Send</string>
+	<string name="txt_create_group_failed">Create group failed</string>
+	<string name="txt_message">Message</string>
+	<string name="txt_reply">Reply</string>
+	<string name="txt_copy">Copy</string>
+	<string name="txt_share">Share</string>
+	<string name="txt_delete">Delete</string>
+	<string name="txt_search">Search</string>
+
+<!--  Account  -->
+
+	<string name="account_title">Account</string>
+	<string name="account_profile">Profile</string>
+	<string name="account_setting">Setting</string>
+	<string name="account_name_placeholder">Enter your name</string>
+	<string name="account_phone_placeholder">Enter your phone</string>
+	<string name="account_language">Language</string>
+	<string name="account_update">Update</string>
+</resources>

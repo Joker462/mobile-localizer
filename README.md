@@ -14,7 +14,7 @@ Sample CSV
 | :------|:-------------:|:-------------:|
 |pause_key |paused | dừng |
 |start_key |start| bắt đầu |
-|stop_key | stop |dừng |
+|stop_key | stop |kết thúc |
 
 ## Installation
 #### Requires Python 2.7 or above.

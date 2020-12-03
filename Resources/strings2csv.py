@@ -120,7 +120,7 @@ def create_csv_file_ios(source_path, out_path):
                                 else:
                                     translationList.append(Translation(line.strip(), [True]))
                             elif line:
-                                lineSearch = re.search('\"(.*)\"\ \=\ \"(.*)\"\;', line.strip())
+                                lineSearch = re.search('\"(.*)\"\\s*\=\\s*\"(.*)\"\;', line.strip())
                                 if lineSearch:
                                     tempKey = lineSearch.group(1)
                                     tempVal = lineSearch.group(2)

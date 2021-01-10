@@ -1,0 +1,25 @@
+/*
+ Localizable.strings
+*/
+
+/* Common */
+
+"txt_cancel" = "取消";
+"txt_send" = "发送";
+"txt_create_group_failed" = "建立群组失败";
+"txt_message" = "信息";
+"txt_reply" = "回复";
+"txt_copy" = "复制";
+"txt_share" = "分享";
+"txt_delete" = "删除";
+"txt_search" = "搜索";
+
+/* Account */
+
+"account_title" = "帐户";
+"account_profile" = "个人资料";
+"account_setting" = "设置";
+"account_name_placeholder" = "输入你的名字";
+"account_phone_placeholder" = "输入你的手机";
+"account_language" = "语言";
+"account_update" = "更新资料";

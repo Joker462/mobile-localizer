@@ -1,5 +1,9 @@
 #!/usr/bin/env python
-import sys, argparse, logging, os, csv
+import sys, argparse, logging, os
+from openpyxl import load_workbook
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 PLATFORM = None
 IN_PATH = None
@@ -72,41 +76,42 @@ def generate_keys(source_path, output, platform):
     for dirname, dirnames, filenames in os.walk(source_path):
         for f in filenames:
             filename, ext = os.path.splitext(f)
-            if ext != '.csv':
+            if ext != '.xlsx':
                 continue
         
             fullpath = os.path.join(dirname, f)
             
             # create language key
-            with open(fullpath, 'rb') as csvfile:
-                reader = csv.reader(csvfile, delimiter=',')
-                first_row = next(reader)
-                
-                # remove the first element in first row cause this has value 'key'
-                line = first_row[1:]
-                LANG_KEYS = line  # assign new value to key
-                
-                # iterate each language
-                lang_path = ""
-                for lang in LANG_KEYS:
-                    if platform == "ios":
-                        lang_path = os.path.join(base_out_dir, "{0}.lproj/".format(lang))
-                
-                    if platform == "android":
-                        lang_path = os.path.join(base_out_dir, "values-{0}/".format(lang))
-                
-                    # Generate directory per language key
-                    if not os.path.exists(lang_path):
-                        os.makedirs(lang_path)
-                
-                
+            workbook = load_workbook(fullpath)
+            worksheet = workbook.active
+            first_row = worksheet[1]
+            line = []
+            for cell in first_row:
+                line.append(cell.value)
+            
+            # remove the first element in first row cause this has value 'key'
+            LANG_KEYS = line[1:]  # assign new value to key
+
+            # iterate each language
+            lang_path = ""
+            for lang in LANG_KEYS:
+                if platform == "ios":
+                    lang_path = os.path.join(base_out_dir, "{0}.lproj/".format(lang))
+
+                if platform == "android":
+                    lang_path = os.path.join(base_out_dir, "values-{0}/".format(lang))
+
+                # Generate directory per language key
+                if not os.path.exists(lang_path):
+                    os.makedirs(lang_path)
+
             if platform == "ios":
                 full_out_paths = [os.path.join(base_out_dir, "{0}.lproj/".format(langKey) + "Localizable.strings") for langKey in LANG_KEYS]
             if platform == "android":
                 full_out_paths = [os.path.join(base_out_dir, "values-{0}/".format(langKey) + "strings.xml") for langKey in LANG_KEYS]
-                
+
         allwrites = [open(out_path, 'w') for out_path in full_out_paths]
-                
+
         if platform == "ios":
             start_localize_ios(source_path, allwrites, LANG_KEYS)
         if platform == "android":
@@ -117,7 +122,13 @@ def generate_keys(source_path, output, platform):
 # =========================================================================
 def check_availability(element, collection):
     return element in collection
-            
+
+def to_unicode_or_bust(obj, encoding='utf-8'):
+    if isinstance(obj, basestring) and encoding:
+        if not isinstance(obj, unicode):
+            obj = unicode(obj, encoding)
+    return obj
+
 # =========================================================================
 # ++++++++++++++++++++++++++++++ iOS ++++++++++++++++++++++++++++++++++++++
 # =========================================================================
@@ -127,43 +138,42 @@ def start_localize_ios(source_path, all_writes, lang_keys):
     for dirname, dirnames, filenames in os.walk(source_path):
         for f in filenames:
             filename, ext = os.path.splitext(f)
-            if ext != '.csv':
+            if ext != '.xlsx':
                 continue
         
             fullpath = os.path.join(dirname, f)
-        
-            with open(fullpath, 'rb') as csvfile:
-                # Header
-                [fwrite.write('/*\n Localizable.strings\n*/\n') for fwrite in allwrites]
-        
-                reader = csv.reader(csvfile, delimiter=',')
-                iterrows = iter(reader)
-                next(iterrows) # skip first line (it is header).
-        
-                my_list = ['']
-                for row in iterrows:
-                    row_key = row[0]
+            workbook = load_workbook(fullpath)
+            worksheet = workbook.active
+            # skip first line (it is header).
+            rows = worksheet.iter_rows(min_row=2)
             
-                    # comment
-                    if row_key == '':
-                        continue
-                    elif row_key[:2] == '/*':
-                        [fwrite.write('\n{key}\n'.format(key=row[0])) for fwrite in allwrites]
-                        continue
-                    # check contains
-                    elif check_availability(row_key, my_list):
-                        continue
+            # Header
+            [fwrite.write('/*\n Localizable.strings\n*/\n') for fwrite in allwrites]
             
-                    my_list.append(row_key)
-                    row_values = [row[i+1] for i in range(len(lang_keys))]
-                    # if any row is empty, skip it!
-                    if any([value == '' for value in row_values]):
-                        [fwrite.write('\n') for idx, fwrite in enumerate(allwrites)]
-                    else:
-                        [fwrite.write('"{key}" = "{lang}";\n'.format(key=row_key, lang=row_values[idx])) for idx, fwrite in enumerate(allwrites)]
+            my_key_list = ['']
+            for row in rows:
+                row_key = row[0].value
+                
+                # comment
+                if row_key == '':
+                    continue
+                elif row_key[:2] == '/*':
+                    [fwrite.write('\n{key}\n'.format(key=row_key)) for fwrite in allwrites]
+                    continue
+                # check contains
+                elif check_availability(row_key, my_key_list):
+                    continue
+                
+                my_key_list.append(row_key)
+                row_values = [row[i+1] for i in range(len(lang_keys))]
+                
+                # if any row is empty, skip it!
+                if any([value.value == '' for value in row_values]):
+                    [fwrite.write('\n') for idx, fwrite in enumerate(allwrites)]
+                else:
+                    [fwrite.write('"{key}" = "{lang}";\n'.format(key=row_key, lang=row_values[idx].value)) for idx, fwrite in enumerate(allwrites)]
+            
     [fwrite.close() for fwrite in allwrites]
-            
-            
             
 # =========================================================================
 # ++++++++++++++++++++++++++++++ Android ++++++++++++++++++++++++++++++++++
@@ -177,43 +187,43 @@ def start_localize_android(source_path, all_writes, lang_keys):
     for dirname, dirnames, filenames in os.walk(source_path):
         for f in filenames:
             filename, ext = os.path.splitext(f)
-            if ext != '.csv':
+            if ext != '.xlsx':
                 continue
         
             fullpath = os.path.join(dirname, f)
-        
-            with open(fullpath, 'rb') as csvfile:
-                # Header
-                [fwrite.write('\n<!--\n Localizable.strings\n-->\n') for fwrite in allwrites]
-        
-                reader = csv.reader(csvfile, delimiter=',')
-                iterrows = iter(reader)
-                next(iterrows) # skip first line (it is header).
-        
-                my_list = ['']
-                for row in iterrows:
-                    row_key = row[0]
+            workbook = load_workbook(fullpath)
+            worksheet = workbook.active
+            # skip first line (it is header).
+            rows = worksheet.iter_rows(min_row=2)
             
-                    if row_key == '':
-                        continue
-                    # comment
-                    elif row_key[:2] == '/*':
-                        [fwrite.write('\n<!-- {key} -->\n'.format(key=row_key.replace("/*", "").replace("*/", ""))) for fwrite in allwrites]
-                        continue
-                    # check contains
-                    elif check_availability(row_key, my_list):
-                        continue
+            # Header
+            [fwrite.write('\n<!--\n Localizable.strings\n-->\n') for fwrite in allwrites]
+                        
+            my_key_list = ['']
+            for row in rows:
+                row_key = row[0].value
+                
+                if row_key == '':
+                    continue
+                # comment
+                elif row_key[:2] == '/*':
+                    [fwrite.write('\n<!-- {key} -->\n'.format(key=row_key.replace("/*", "").replace("*/", ""))) for fwrite in allwrites]
+                    continue
+                # check contains
+                elif check_availability(row_key, my_key_list):
+                    continue
             
-                    my_list.append(row_key)
-                    row_values = [row[i+1] for i in range(len(lang_keys))]
-                    # if any row is empty, skip it!
-                    if any([value == '' for value in row_values]):
-                        [fwrite.write('\n') for idx, fwrite in enumerate(allwrites)]
-                    else:
-                        [fwrite.write('\t<string name="{key}">{lang}</string>\n'.format(key=row_key, lang=row_values[idx])) for idx, fwrite in enumerate(allwrites)]
-                [fwrite.write('</resources>') for fwrite in allwrites]
+                my_key_list.append(row_key)
+                row_values = [row[i+1] for i in range(len(lang_keys))]
+                
+                # if any row is empty, skip it!
+                if any([value.value == '' for value in row_values]):
+                    [fwrite.write('\n') for idx, fwrite in enumerate(allwrites)]
+                else:
+                    [fwrite.write('\t<string name="{key}">{lang}</string>\n'.format(key=row_key, lang=row_values[idx].value)) for idx, fwrite in enumerate(allwrites)]
+                
     [fwrite.close() for fwrite in allwrites]
-        
+    
 # =========================================================================
 # +++++++ Standard boilerplate to call the main() function to begin +++++++
 # =========================================================================

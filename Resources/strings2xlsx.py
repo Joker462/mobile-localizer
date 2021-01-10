@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-import sys, argparse, logging, os, csv, re
+import sys, argparse, logging, os, re
+from openpyxl import Workbook
 
 IN_PATH = None
 OUT_PATH = None
@@ -12,7 +13,7 @@ def main(args, loglevel):
     OUT_PATH = args.output
     PLATFORM = args.platform
     print '\n'
-    logging.info("Start generate csv file .... ")
+    logging.info("Start generate xlsx file .... ")
     print '\n'
     logging.info("------------------------------------")
     
@@ -51,10 +52,10 @@ def main(args, loglevel):
     logging.debug("\n")
     if PLATFORM == "ios":
       logging.debug("Platform : %s" % PLATFORM)
-      generate_csv_from_ios(IN_PATH, OUTPUT_DIR)
+      generate_xlsx_from_ios(IN_PATH, OUTPUT_DIR)
     elif PLATFORM == "android":
       logging.debug("Platform : %s" % PLATFORM)
-      generate_csv_from_android(IN_PATH, OUTPUT_DIR)
+      generate_xlsx_from_android(IN_PATH, OUTPUT_DIR)
     else:
       logging.warn("Invalid platform, platform should be ios, android.")
       logging.debug("\n")
@@ -81,13 +82,12 @@ def find_translation(translation_list, key):
     return False
     
 # =========================================================================
-# ++++++++++++++++++++++ Generate csv file from iOS +++++++++++++++++++++++
+# ++++++++++++++++++++++ Generate xlsx file from iOS +++++++++++++++++++++++
 # =========================================================================
-def generate_csv_from_ios(source_path, out_path):
+def generate_xlsx_from_ios(source_path, out_path):
     endswithFolder = ".lproj"
     fields = ["key"]
     rows = []
-    translationDict = {}
     translationList = []
     originFilePaths = []
     full_out_paths = None
@@ -141,7 +141,7 @@ def generate_csv_from_ios(source_path, out_path):
                         multiline_comment_flag = False
                     continue
 
-    # Append to rows to write on csv file
+    # Append to rows to write on xlsx file
     for translation in translationList:
         tempCol = [translation.key]
         for value in translation.values:
@@ -151,19 +151,19 @@ def generate_csv_from_ios(source_path, out_path):
                 tempCol.append(value)
         rows.append(tempCol)
         
-    create_csv_file(out_path, fields, rows)
+    create_xlsx_file(out_path, fields, rows)
 
 # =========================================================================
-# ++++++++++++++++++++ Generate csv file from Android +++++++++++++++++++++
+# ++++++++++++++++++++ Generate xlsx file from Android +++++++++++++++++++++
 # =========================================================================
-def generate_csv_from_android(source_path, out_path):
+def generate_xlsx_from_android(source_path, out_path):
     startswithFolder = "values-"
     fields = ["key"]
     rows = []
     translationList = []
     originFilePaths = []
     full_out_paths = None
-
+    
     for root, roots, filenames in os.walk(source_path):
         endPath = os.path.basename(os.path.normpath(root))
         if (endPath.startswith(startswithFolder)):
@@ -214,7 +214,7 @@ def generate_csv_from_android(source_path, out_path):
                         multiline_comment_flag = False
                     continue
                     
-    # Append to rows to write on csv file
+    # Append to rows to write on xlsx file
     for translation in translationList:
         tempCol = [translation.key]
         for value in translation.values:
@@ -224,25 +224,32 @@ def generate_csv_from_android(source_path, out_path):
                 tempCol.append(value)
         rows.append(tempCol)
    
-    create_csv_file(out_path, fields, rows)
+    create_xlsx_file(out_path, fields, rows)
 
 # =========================================================================
-# ++++++++++++++++++++++++++ Create csv file ++++++++++++++++++++++++++++++
+# ++++++++++++++++++++++++++ Create xlsx file +++++++++++++++++++++++++++++
 # =========================================================================
-def create_csv_file(out_path, fields, rows):
-    full_out_paths = os.path.join(out_path, "translations.csv")
-    with open(full_out_paths, 'wb') as csvfile:
-        csvwriter = csv.writer(csvfile, quotechar = '"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
-        csvwriter.writerow(fields)
-        csvwriter.writerows(rows)
+def create_xlsx_file(out_path, fields, values):
+    full_out_paths = os.path.join(out_path, "translations.xlsx")
+    
+    # Create a workbook and add a worksheet.
+    workbook = Workbook()
+    worksheet = workbook.active
+    worksheet.append(fields)
+    
+    for value in values:
+        text = [val.decode('utf-8') for val in value]
+        worksheet.append(text)
+
+    workbook.save(full_out_paths)
 
 # =========================================================================
 # +++++++ Standard boilerplate to call the main() function to begin +++++++
 # =========================================================================
-parser = argparse.ArgumentParser(description="CSV file commands")
+parser = argparse.ArgumentParser(description="XLSX file commands")
 parser.add_argument("-p", help="Specify Platform (iOS, Android)", dest="platform", type=str, required=True)
 parser.add_argument("-i", help="Input source, Iproj directories paths", dest="input", type=str, required=True)
-parser.add_argument("-o", help="Generated output path for csv file", dest="output", type=str, required=True)
+parser.add_argument("-o", help="Generated output path for xlsx file", dest="output", type=str, required=True)
 
 parser.add_argument("-v",
                     "--verbose",

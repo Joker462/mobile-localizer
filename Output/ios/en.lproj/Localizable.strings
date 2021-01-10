@@ -1,10 +1,8 @@
 /*
  Localizable.strings
- Netalo
 */
 
 /* Common */
-
 "txt_cancel" = "Cancel";
 "txt_send" = "Send";
 "txt_create_group_failed" = "Create group failed";
@@ -16,7 +14,6 @@
 "txt_search" = "Search";
 
 /* Account */
-
 "account_title" = "Account";
 "account_profile" = "Profile";
 "account_setting" = "Setting";

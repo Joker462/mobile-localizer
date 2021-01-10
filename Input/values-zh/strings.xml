@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--
+ Localizable.strings
+-->
+
+<!--  Common  -->
+
+	<string name="txt_cancel">取消</string>
+	<string name="txt_send">发送</string>
+	<string name="txt_create_group_failed">建立群组失败</string>
+	<string name="txt_message">信息</string>
+	<string name="txt_reply">回复</string>
+	<string name="txt_copy">复制</string>
+	<string name="txt_share">分享</string>
+	<string name="txt_delete">删除</string>
+	<string name="txt_search">搜索</string>
+
+<!--  Account  -->
+
+	<string name="account_title">帐户</string>
+	<string name="account_profile">个人资料</string>
+	<string name="account_setting">设置</string>
+	<string name="account_name_placeholder">输入你的名字</string>
+	<string name="account_phone_placeholder">输入你的手机</string>
+	<string name="account_language">语言</string>
+	<string name="account_update">更新资料</string>
+</resources>

@@ -1,10 +1,8 @@
 /*
  Localizable.strings
- Netalo
 */
 
 /* Common */
-
 "txt_cancel" = "Hủy";
 "txt_send" = "Gửi";
 "txt_create_group_failed" = "Tạo nhóm thất bại";
@@ -16,7 +14,6 @@
 "txt_search" = "Tìm kiếm";
 
 /* Account */
-
 "account_title" = "Tài khoản";
 "account_profile" = "Hồ sơ cá nhân";
 "account_setting" = "Cài đặt thông báo";

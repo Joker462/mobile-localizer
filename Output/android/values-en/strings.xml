@@ -2,11 +2,9 @@
 <resources>
 <!--
  Localizable.strings
- Netalo
 -->
 
 <!--  Common  -->
-
 	<string name="txt_cancel">Cancel</string>
 	<string name="txt_send">Send</string>
 	<string name="txt_create_group_failed">Create group failed</string>
@@ -18,7 +16,6 @@
 	<string name="txt_search">Search</string>
 
 <!--  Account  -->
-
 	<string name="account_title">Account</string>
 	<string name="account_profile">Profile</string>
 	<string name="account_setting">Setting</string>

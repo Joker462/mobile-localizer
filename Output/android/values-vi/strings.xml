@@ -2,11 +2,9 @@
 <resources>
 <!--
  Localizable.strings
- Netalo
 -->
 
 <!--  Common  -->
-
 	<string name="txt_cancel">Hủy</string>
 	<string name="txt_send">Gửi</string>
 	<string name="txt_create_group_failed">Tạo nhóm thất bại</string>
@@ -18,7 +16,6 @@
 	<string name="txt_search">Tìm kiếm</string>
 
 <!--  Account  -->
-
 	<string name="account_title">Tài khoản</string>
 	<string name="account_profile">Hồ sơ cá nhân</string>
 	<string name="account_setting">Cài đặt thông báo</string>

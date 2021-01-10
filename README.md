@@ -1,4 +1,4 @@
-# mobile-csv-localizer
+# mobile-localizer
 This command tool writing in Python. It allows iOS and Android developers to save time doing the manual copy and paste in their localizable string list.
 
 Thank [Roger Molas](https://github.com/rogermolas/csv-localizer) author for writing convert csv file to localizable string list. I only write a script to convert localizable string list to CSV file.

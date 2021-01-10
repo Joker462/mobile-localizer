@@ -17,7 +17,8 @@ Sample CSV
 |stop_key | stop |kết thúc |
 
 ## Installation
-#### Requires Python 2.7 or above.
+- Requires Python 2.7 or above.
+
 - Just only clone this source and using the command to direct at the root of this source in terminal or cmd.
 
 - Need to install [openpyxl](https://openpyxl.readthedocs.io) for using xlsx files.

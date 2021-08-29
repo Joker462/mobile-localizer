@@ -12,9 +12,9 @@ def main(args, loglevel):
     PLATFORM = args.platform
     IN_PATH = args.input
     OUT_PATH = args.output
-    print '\n'
+    print('\n')
     logging.info("Start Localizing .... ")
-    print '\n'
+    print('\n')
     logging.info("------------------------------------")
     
     # check source path
@@ -61,7 +61,7 @@ def main(args, loglevel):
     
     logging.info("Generated output directory: %s" % OUTPUT_DIR)
     generate_keys(IN_PATH, OUTPUT_DIR, PLATFORM)
-    print '\n'
+    print('\n')
     logging.info("DONE LOCALIZING.\n")
 
 def generate_keys(source_path, output, platform):
@@ -78,7 +78,7 @@ def generate_keys(source_path, output, platform):
             fullpath = os.path.join(dirname, f)
             
             # create language key
-            with open(fullpath, 'rb') as csvfile:
+            with open(fullpath, 'rt', encoding='utf8') as csvfile:
                 reader = csv.reader(csvfile, delimiter=',')
                 first_row = next(reader)
                 
@@ -132,7 +132,7 @@ def start_localize_ios(source_path, all_writes, lang_keys):
         
             fullpath = os.path.join(dirname, f)
         
-            with open(fullpath, 'rb') as csvfile:
+            with open(fullpath, 'rt', encoding='utf8') as csvfile:
                 # Header
                 [fwrite.write('/*\n Localizable.strings\n*/\n') for fwrite in allwrites]
         
@@ -182,7 +182,7 @@ def start_localize_android(source_path, all_writes, lang_keys):
         
             fullpath = os.path.join(dirname, f)
         
-            with open(fullpath, 'rb') as csvfile:
+            with open(fullpath, 'rt', encoding='utf8') as csvfile:
                 # Header
                 [fwrite.write('\n<!--\n Localizable.strings\n-->\n') for fwrite in allwrites]
         

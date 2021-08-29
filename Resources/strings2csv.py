@@ -11,9 +11,9 @@ def main(args, loglevel):
     IN_PATH = args.input
     OUT_PATH = args.output
     PLATFORM = args.platform
-    print '\n'
+    print('\n')
     logging.info("Start generate csv file .... ")
-    print '\n'
+    print('\n')
     logging.info("------------------------------------")
     
     # check source path
@@ -61,7 +61,7 @@ def main(args, loglevel):
       logging.error('ERROR GENERATING.\n')
       return
 
-    print '\n'
+		print('\n')
     logging.info("DONE GENERATING.\n")
     
     

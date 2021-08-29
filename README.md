@@ -31,8 +31,9 @@ Commands:
   make xlsx2android    # Convert XLSX file to .xml (need to copy xlsx file into Input directory)
   make ios2csv         # Convert .strings file to CSV file (need to copy all .Iproj folders into Input directory)
   make csv2ios         # Convert CSV file to .strings (need to copy csv file into Input directory)
-  make xlsx2ios        # Convert XLSX file to .strings (need to copu csv file into Input directory)
-  
+  make xlsx2ios        # Convert XLSX file to .strings (need to copy csv file into Input directory)
+  make xlsx2json       # Convert XLSX file to JSON file (need to copy xlsx file into Input directory)
+  make csv2json        # Convert CSV file to JSON file (need to copy csv file into Input directory)
 ```
 
 ## License

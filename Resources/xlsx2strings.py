@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-import sys, argparse, logging, os
+import sys, argparse, logging, os, importlib
 from openpyxl import load_workbook
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+# Python 3.8 and more
+importlib.reload(sys)
 
 PLATFORM = None
 IN_PATH = None
@@ -16,9 +16,9 @@ def main(args, loglevel):
     PLATFORM = args.platform
     IN_PATH = args.input
     OUT_PATH = args.output
-    print '\n'
+    print('\n')
     logging.info("Start Localizing .... ")
-    print '\n'
+    print('\n')
     logging.info("------------------------------------")
     
     # check source path
@@ -65,7 +65,7 @@ def main(args, loglevel):
     
     logging.info("Generated output directory: %s" % OUTPUT_DIR)
     generate_keys(IN_PATH, OUTPUT_DIR, PLATFORM)
-    print '\n'
+    print('\n')
     logging.info("DONE LOCALIZING.\n")
 
 def generate_keys(source_path, output, platform):

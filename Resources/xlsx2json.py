@@ -56,12 +56,22 @@ def main(args, loglevel):
     generate_keys(IN_PATH, OUTPUT_DIR)
     print('\n')
     logging.info("DONE LOCALIZING.\n")
-        
+    
+class LanguageObject:
+    def __init__(self, key, values):
+        self.key = key
+        self.values = values
+
+    def toJSON(self):
+	    return json.dumps(self, default=lambda o: o.__dict__, ensure_ascii=False)
+
+def obj_dict(obj):
+    return obj.__dict__
 # =========================================================================
 # ++++++++++++++++++++++++ Generate Output ++++++++++++++++++++++++++++++++
 # =========================================================================
 def generate_keys(source_path, output_path):
-    translationDict = {}
+    languages = []
     
     for dirname, dirnames, filenames in os.walk(source_path):
         for f in filenames:
@@ -100,10 +110,10 @@ def generate_keys(source_path, output_path):
                     except IndexError:
                         continue
                         
-                translationDict[key] = langDict
+                languages.append(LanguageObject(key, langDict))
                 
     # write json file
-    write_json(output_path, 'languages.json', translationDict)
+    write_json(output_path, 'languages.json', languages)
 
 def write_json(target_path, target_file, data):
     if not os.path.exists(target_path):
@@ -112,8 +122,10 @@ def write_json(target_path, target_file, data):
         except Exception as e:
             print(e)
             raise
+    parser = json.dumps(data, default=obj_dict, ensure_ascii=False)
+    
     with open(os.path.join(target_path, target_file), 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False)
+        print(parser,file=f)
 # =========================================================================
 # +++++++ Standard boilerplate to call the main() function to begin +++++++
 # =========================================================================
